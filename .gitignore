@@ -40,6 +40,8 @@
 # debug information files
 *.dwo
 
-CMakeLists.txt
+
 build/
 .vscode/
+adaptec*
+testout

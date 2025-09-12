@@ -24,8 +24,8 @@ public:
     bool isMacro;
     bool isFixed;
     bool isFiller;
-    vector<Pin *> modulePins;
-    vector<Net *> nets;
+    vector<shared_ptr<Pin>> modulePins;
+    vector<shared_ptr<Net>> nets;
     void Init()
     {
         idx = -1;
@@ -71,32 +71,22 @@ public:
     void init()
     {
         idx = -1;
-        module = NULL;
-        net = NULL;
         offset.SetZero();
 
     }
     int idx;
-    Module *module;
-    Net *net;
+    weak_ptr<Module> module;
+    weak_ptr<Net> net;
     POS_2D offset;
 };
 
-class Net
-{
+class Net {
 public:
-    Net()
-    {
-        init();
-    }
-    int idx;
-    vector<Pin *> netPins;
+  Net(string &_name) : name(_name) { init(); }
+  string name;
+  vector<shared_ptr<Pin>> netPins;
 
-    void init()
-    {
-        idx = 0;
-        netPins.clear();
-    }
+  void init() { netPins.clear(); }
 };
 
 #endif

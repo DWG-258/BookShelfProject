@@ -13,6 +13,7 @@
 #include <list>
 #include <set>
 #include "string.h"
+#include <memory>
 
 using namespace std;
 
