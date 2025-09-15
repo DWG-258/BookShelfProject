@@ -50,7 +50,7 @@ void FileReader::read_pl(const fs::path& filePath)
      
         module->center.x=stof(x_coordinate);
         module->center.y=stof(y_coordinate);
-        module->orientation=direction=="N" ? 0 : direction=="E" ? 90 : direction=="S" ? 180 : direction=="W" ? 270 : 0;
+        module->orientation=direction=="N" ? Orientation::N : direction=="E" ? Orientation::E : direction=="S" ?  Orientation::S : direction=="W" ? Orientation::W : 0;
         module->isFixed=is_fixed;
 
     

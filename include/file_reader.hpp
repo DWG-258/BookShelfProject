@@ -72,3 +72,13 @@ class FileReader{
      */
     std::vector<std::string> splist_by_space(std::string& line);
 };
+
+
+struct Orientation{
+    static constexpr float N=0;
+    static constexpr float E=90;
+    static constexpr float S=180;
+    static constexpr float W=270;
+    //to be confirm
+    static constexpr float FS=0;
+};
