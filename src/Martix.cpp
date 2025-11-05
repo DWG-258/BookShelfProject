@@ -37,9 +37,7 @@ void caclculate_parm_matrix(
 
                 if (p == nullptr || q == nullptr)
                 {
-                    printf("(%d, %d)\n", i, j);
-                    printf("nullptr");
-                    return;
+                    throw std::runtime_error("Invalid pin pointer");
                 }
 
                 shared_ptr<Module> mp = p.get()->module.lock();
@@ -94,7 +92,7 @@ void caclculate_parm_matrix(
 
 std::pair<vector<unordered_map<int, double>>, vector<double>> PlaceData::get_parm_matrix()
 {
-    printf("1222");
+   
     vector<unordered_map<int, double>> A;
     vector<double> b;
     caclculate_parm_matrix(Nodes, Nets, A, b);
