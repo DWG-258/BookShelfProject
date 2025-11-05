@@ -19,7 +19,7 @@ class Timer
         };
         ~Timer(){
             elapsed = std::chrono::high_resolution_clock::now() - start;
-            std::cout << task_name_ <<"Test time: " << elapsed.count() << " s\n";
+            std::cout << task_name_ <<" Test time: " << elapsed.count() << " s\n";
         }
     private:
         std::chrono::time_point<std::chrono::high_resolution_clock> start;

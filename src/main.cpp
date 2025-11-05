@@ -12,8 +12,8 @@ int main(int argc, char* argv[]) {
   std::cout << "Reading file: " << file << std::endl;
   
   auto fr = std::make_shared<FileReader>(file);
-  fr->test_print();
-  fr->get_pdata()->print_info();
+  // fr->test_print();
+  fr->get_pdata()->get_parm_martix_info("/home/ezio/ClassProject3/info.txt");
   std::cout << "File read successfully!" << std::endl;
 
   return 0;

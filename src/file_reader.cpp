@@ -47,6 +47,8 @@ void FileReader::read_pl(const fs::path& filePath)
         auto& direction=splist_result[4];
         bool is_fixed=(splist_result.size()==6&&splist_result[5]=="/FIXED");
 
+        auto module_idx=module_name.substr(1);
+
         auto module=pdata->getModuleByName(module_name);
         if(module==nullptr){
             module=make_shared<Module>();
@@ -54,7 +56,7 @@ void FileReader::read_pl(const fs::path& filePath)
             pdata->moduleMap[module_name]=module;
             pdata->Nodes.push_back(module);
         }
-
+        module.get()->idx=stoi(module_idx.c_str());
         module.get()->center.x=stof(x_coordinate);
         module.get()->center.y=stof(y_coordinate);
         module.get()->orientation=direction=="N" ? Orientation::N : direction=="E" ? Orientation::E : direction=="S" ?  Orientation::S : direction=="W" ? Orientation::W : 0;
@@ -78,7 +80,6 @@ void FileReader::read_nets(const std::filesystem::path &nets_path) {
     std::istringstream iss(line);
     std::string token, skip;
     std::string_view sv(line);
-    
     if (sv.find("NumPins") != std::string_view::npos) {
       iss >> skip >> skip >> token;
       std::from_chars(token.data(), token.data() + token.size(),
@@ -91,12 +92,18 @@ void FileReader::read_nets(const std::filesystem::path &nets_path) {
       pdata->Nets.reserve(2 * pdata->netCount);
     } else if (sv.find("NetDegree") != std::string_view::npos) {
       iss >> skip >> skip >> token;
-      unsigned int num_pins = std::stoi(token);
+      size_t num_pins;
+      std::from_chars(token.data(), token.data() + token.size(), num_pins);
       string net_name;
       iss >> net_name;
       auto net = std::make_shared<Net>(net_name);
       pdata->max_net_degree =
           pdata->max_net_degree > num_pins ? pdata->max_net_degree : num_pins;
+      if (pdata->pin_num.find(num_pins) == pdata->pin_num.end()) {
+        pdata->pin_num[num_pins] = 1;
+      } else {
+        pdata->pin_num[num_pins] += 1;
+      }
       for (unsigned int i = 0; i < num_pins; i++) {
         std::getline(infile, line);
         std::istringstream pin_iss(line);
@@ -109,9 +116,10 @@ void FileReader::read_nets(const std::filesystem::path &nets_path) {
         std::from_chars(token.data(), token.data() + token.size(), x_offset);
         pin_iss >> token;
         std::from_chars(token.data(), token.data() + token.size(), y_offset);
-        {auto mod = pdata->getModuleByName(module_name);
+        auto mod = pdata->getModuleByName(module_name);
         if (mod == nullptr) {
-          throw std::runtime_error("Module " + module_name + " not found in moduleMap");
+          throw std::runtime_error("Module " + module_name +
+                                   " not found in moduleMap");
         } else {
         }
         auto pin = std::make_shared<Pin>();
@@ -129,7 +137,7 @@ void FileReader::read_nets(const std::filesystem::path &nets_path) {
         mod->nets.push_back(net);
         // read
         net->netPins.push_back(pin);
-        pdata->Pins.push_back(pin);}
+        pdata->Pins.push_back(pin);
       }
       pdata->Nets.push_back(net);
     }
@@ -139,7 +147,7 @@ void FileReader::read_nets(const std::filesystem::path &nets_path) {
 
 void FileReader::read_scl(const fs::path& scl_path)
 {
-     Timer timer;
+    Timer timer;
     if(scl_path.extension() != ".scl"){
        throw std::runtime_error("File extension is not .scl");
     }
@@ -228,6 +236,5 @@ void FileReader::read_scl(const fs::path& scl_path)
     
     std::cout << "read_scl done. Parsed " << pdata->siteRows.size() << " site rows." << std::endl;
 }
-
 
 

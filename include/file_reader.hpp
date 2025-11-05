@@ -32,11 +32,13 @@ class FileReader{
             std::filesystem::path wts_path = path / (dir_name + ".wts");
             pdata = make_shared<PlaceData>();
             // read_aux(aux_path);
+            printf("1");
             read_pl(pl_path);
+            printf("2");
             read_nets(nets_path);
             // read_nodes(nodes_path);
-            
-            read_scl(scl_path);
+            // printf("3");
+            // read_scl(scl_path);
             // read_wts(wts_path);
             myplace = make_shared<MyPlacer>(pdata.get());
         }

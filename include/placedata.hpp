@@ -2,15 +2,34 @@
 #define PLACEDATA_H
 #include "objects.hpp"
 #include <cmath>
+#include <random>
+#include <filesystem>
+
+
+using A_martix_t = vector<unordered_map<int,double>>;
+using b_martix_t = vector<double>;
+
 
 class PlaceData
 {
 public:
-    int moduleCount;
-    int MacroCount;
-    int netCount;
-    int pinCount;
-    int numRows;
+   
+    
+
+    const static std::mt19937& gen(){
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    return gen;
+  }
+
+  int moduleCount;
+  int MacroCount;
+  int netCount;
+  int pinCount;
+
+  int numRows;
+  size_t max_net_degree{0};
+  std::map<int, int> pin_num;
 
     vector<shared_ptr<Module>> Nodes;
     vector<shared_ptr<Module>> Terminals;
@@ -19,7 +38,7 @@ public:
     vector<SiteRow> SiteRows;
     vector<shared_ptr<SiteRow>> siteRows; // 新添加的成员变量，用于存储SiteRow智能指针
 
-    size_t max_net_degree{0};
+
 
     unordered_map<string, shared_ptr<Module>> moduleMap;
     shared_ptr<Module> getModuleByName(const string &name)
@@ -31,8 +50,42 @@ public:
         return nullptr;
     }
 
+
+    std::pair<A_martix_t,b_martix_t>  get_parm_matrix();
     void print_info()
     {
+  
+       
+
+    }
+
+     void get_parm_martix_info(std::filesystem::path path){ 
+        std::ofstream fout(path);
+         auto result = get_parm_matrix();
+        fout << "get_parm_matrix" << std::endl;
+        for (auto &A : result.first)
+        {
+          
+            for (auto &node : A)
+            {
+                 fout << "A_martix_t: " << node.first << ": ";
+                fout <<node.second << " ";
+            }
+            fout << std::endl;
+        }
+
+        fout<<"b_martix_t" << std::endl;
+        for (auto &node : result.second)
+        {
+            
+            fout <<  node << " ";
+           
+            fout << std::endl;
+        }
+     }
+
+    void get_nodes_and_terminals_info()
+    { 
         int num_modules = Nodes.size();
         int macro_count = 0;
         int fixed_count = 0;
@@ -45,6 +98,7 @@ public:
         }
         std::ofstream fout("/home/ezio/ClassProject3/info.txt");
         fout << "Object #:" << num_modules << "(=" << static_cast<int>(num_modules / 1000) << "k)" << "(fixed:" << fixed_count << ")(macro:" << macro_count << ") " << std::endl;
+
     }
 
     // TODO variables
@@ -125,5 +179,8 @@ public:
     void non_terminal_and_non_terminal();
 
     void terminal_and_non_terminal();
+
+
+   
 };
 #endif
