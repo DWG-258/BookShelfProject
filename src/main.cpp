@@ -3,6 +3,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include "bicgstab.hpp"
 
 using namespace std::chrono;
 int main(int argc, char* argv[]) {
@@ -13,8 +14,12 @@ int main(int argc, char* argv[]) {
   
   auto fr = std::make_shared<FileReader>(file);
   // fr->test_print();
-  fr->get_pdata()->get_parm_martix_info("/home/ezio/ClassProject3/info.txt");
+  // fr->get_pdata()->get_parm_martix_info("/home/ezio/ClassProject3/info.txt");
   std::cout << "File read successfully!" << std::endl;
+  // BiCGSTABSolver bicgstab();
+  // auto martixs=fr->get_pdata()->get_parm_matrix();
+  // auto result=bicgstab.solve(std::get<0>(martixs),std::get<1>(martixs));
+
 
   return 0;
 }

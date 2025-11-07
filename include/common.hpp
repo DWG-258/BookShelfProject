@@ -37,24 +37,6 @@ struct POS_2D // POS means postition which can be used to store coordinates, off
         os << "(" << pos.x << "," << pos.y << ")";
         return os;
     }
-
-    inline POS_2D operator+(const POS_2D &rhs)
-    {
-        POS_2D pos;
-        pos.x = this->x + rhs.x;
-        pos.y = this->y + rhs.y;
-        return pos;
-    }
-
-    inline POS_2D operator-(const POS_2D &rhs) const
-    {
-        POS_2D pos;
-        pos.x = this->x - rhs.x;
-        pos.y = this->y - rhs.y;
-        return pos;
-    }
-
-    
 };
 
 struct VECTOR_3D
