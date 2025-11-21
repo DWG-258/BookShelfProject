@@ -1,6 +1,8 @@
+#pragma once
 #ifndef OBJECTS_H
 #define OBJECTS_H
 #include "common.hpp"
+
 
 class Module;
 class SiteRow;
@@ -112,17 +114,25 @@ public:
         height = 0;
         terminalDensity = 0;
         darkDensity = 0;
+        eDensity = 0;
+        nodeDensity = 0;
+        fillerDensity = 0;
     }
     POS_2D ll;
     POS_2D ur;
     POS_2D center;
     double width;
     double height;
-    double terminalDensity;
-    double darkDensity;
+
+    double nodeDensity = 0.0;
+    double fillerDensity = 0.0;
+    double darkDensity = 0.0;
+    double terminalDensity = 0.0;
+    double eDensity = 0.0;
 };
 
-struct Node {
+struct Node
+{
     std::string name;
     float width = 0;
     float height = 0;

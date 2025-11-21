@@ -12,8 +12,6 @@ void caclculate_parm_matrix(
      vector<vector<double>>& W_y_off)
 {
 
-   
-
     int N = modules.size();
     A.assign(N, {});
     b.assign(N, 0.0);
